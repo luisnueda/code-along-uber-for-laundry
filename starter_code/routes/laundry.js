@@ -23,21 +23,22 @@ router.get('/dashboard', (req, res, next) => {
     query = { user: req.session.currentUser._id };
   }
 
-  LaundryPickup
-    .find(query)
-    .populate('user', 'name')
-    .populate('launderer', 'name')
-    .sort('pickupDate')
-    .exec((err, pickupDocs) => {
-      if (err) {
-        next(err);
-        return;
-      }
+  LaundryPickup.find(query)
+    .populate("user", "name")
+    .populate("launderer", "name")
+    .sort("pickupDate")
+    .then(pickups => res.render("laundry/dashboard", { pickups }))
+    .catch(err => next(err));
+    // .exec((err, pickupDocs) => {
+    //   if (err) {
+    //     next(err);
+    //     return;
+    //   }
 
-      res.render('laundry/dashboard', {
-        pickups: pickupDocs
-      });
-    });
+    //   res.render('laundry/dashboard', {
+    //     pickups: pickupDocs
+    //   });
+    // });
 });
 
 router.post('/launderers', (req, res, next) => {
